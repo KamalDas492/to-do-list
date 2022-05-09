@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Your daily planner</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Cookie&family=Dongle:wght@300&family=Roboto:wght@300;400&display=swap" rel="stylesheet">  </head>
+  <body>
+    <div class="header-div">
+      <div class="header-title">
+        <p class="title">PlanEasy</p>
+      </div>
+
+    </div>
+    <div class="out-div">
+
+      <div class="bg-div">
+        <div class="tasks">
+          <ul id="task-item">
+
+          </ul>
+
+        </div>
+          <p class="message" onclick="addelement()"> Tasks you add appear here</p>
+        <img onclick="addelement()"  class="add-img" src="images/plus.png" alt="Plus">
+      </div>
+    </div>
+<div style="min-height:2em;">
+
+</div>
+<script type="text/javascript">
+//localStorage.clear();
+var i;
+function addelement() {
+  document.getElementsByClassName('message')[0].style.visibility = "hidden";
+  document.getElementsByClassName('tasks')[0].style.visibility = "visible";
+  var node = document.createElement("LI");
+  var x = document.createElement("INPUT");
+  var del_img = document.createElement("img");
+  del_img.src = "images/trash.png";
+  del_img.setAttribute("class","delimage");
+  x.setAttribute("type", "checkbox");
+  //x.setAttribute("style", "height:2vw;width:2vw;position: relative;top: 5px;");
+  x.className = "check-box";
+  x.setAttribute("onclick", "myFunction(this.id)");
+  var num = i;
+  x.setAttribute("id", "cb"+num.toString());
+  del_img.setAttribute("id","di"+num.toString());
+  del_img.setAttribute("onclick", "delete_task(this.id)");
+  node.setAttribute("id","ld"+num.toString())
+  var y = document.createElement("INPUT");
+  y.setAttribute("type", "text");
+  y.setAttribute("placeholder", "Type here");
+y.setAttribute("class", "input_c");
+y.setAttribute("value", "");
+  y.setAttribute("onkeyup", "textupdate(this.id)");
+ num = i;
+ i=i+1;
+y.setAttribute("id", "l_text"+num.toString());
+del_img.setAttribute("class","delimage");
+  node.appendChild(x);
+  node.appendChild(y);
+    node.appendChild(del_img);
+  document.getElementById("task-item").appendChild(node);
+  document.getElementById("l_text"+num.toString()).focus()
+//  console.log(document.getElementById("task-item").childElementCount);
+}
+
+document.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      //document.getElementsByClassName('message')[0].style.visibility = "hidden";
+      //document.getElementsByClassName('tasks')[0].style.visibility = "visible";
+      var node = document.createElement("LI");
+      var x = document.createElement("INPUT");
+      var del_img = document.createElement("img");
+      del_img.src = "images/trash.png";
+      del_img.setAttribute("class","delimage");
+      del_img.setAttribute("onclick", "delete_task(this.id)");
+      x.setAttribute("type", "checkbox");
+      //x.setAttribute("style", "height:2vw;width:2vw;position: relative;top: 5px;");
+      x.setAttribute("onclick", "myFunction(this.id)");
+      x.className = "check-box";
+      var num = i;
+      x.setAttribute("id", "cb"+num.toString());
+      del_img.setAttribute("id","di"+num.toString());
+      node.setAttribute("id","ld"+num.toString())
+      var y = document.createElement("INPUT");
+      y.setAttribute("type", "text");
+      y.setAttribute("placeholder", "Type here");
+      y.setAttribute("class", "input_c");
+      y.setAttribute("value", "");
+      y.setAttribute("onkeyup", "textupdate(this.id)");
+      num = i;
+      i=i+1;
+      y.setAttribute("id", "l_text"+num.toString());
+      node.appendChild(x);
+      node.appendChild(y);
+      node.appendChild(del_img);
+
+      document.getElementById("task-item").appendChild(node);
+      document.getElementById("l_text"+num.toString()).focus();
+      //console.log(document.getElementById("task-item").childElementCount);
+    }
+});
+
+function myFunction(id){
+  //var s = id.length;
+  var text_id = id.slice(2);
+  var t_id = "l_text" + text_id;
+if(document.getElementById(id).checked == true){
+  document.getElementById(t_id).style.textDecorationLine="line-through";
+  document.getElementById(t_id).style.color="#80868B";
+}else{
+  document.getElementById(t_id).style.textDecorationLine="none";
+  document.getElementById(t_id).style.color="#000000";
+}
+
+}
+
+function delete_task(id){
+  var l_id = id.slice(2);
+  var d= "ld"+l_id;
+  var list = document.getElementById(d);
+  list.parentNode.removeChild(list);
+  //list.removeChild(list.childNodes[d]);
+  var num_li = document.getElementsByTagName("LI").length;
+  //console.log(num_li);
+  if(num_li == 0){
+    document.getElementsByClassName('message')[0].style.visibility = "visible";
+  }
+}
+window.onbeforeunload = () => {
+  var tasklist = document.getElementById("task-item").outerHTML;
+  localStorage.setItem("task",tasklist);
+  localStorage.setItem("x",i);
+}
+window.onload = () => {
+  if (localStorage.getItem('task') !== null) {
+
+    document.getElementById("task-item").outerHTML=localStorage.getItem('task');
+    document.getElementsByClassName('tasks')[0].style.visibility = "visible"
+    document.getElementsByClassName('message')[0].style.visibility = "hidden";
+    i = Number(localStorage.getItem('x'));
+    if(document.getElementById("task-item").childElementCount == 0){
+      document.getElementsByClassName('message')[0].style.visibility = "visible";
+    }
+
+} else{
+  //document.getElementById("task-item").outerHTML="<ul id='task-item'></ul>";
+   i=0;
+  // console.log(i);
+  document.getElementsByClassName('message')[0].style.visibility = "visible";
+}
+}
+function textupdate(id){
+  var x = document.getElementById(id).value;
+  document.getElementById(id).setAttribute("value",x);
+}
+</script>
+  </body>
+</html>
